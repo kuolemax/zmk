@@ -1,0 +1,88 @@
+/*
+ * Copyright (c) 2022 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ *
+ */
+
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    chosen {
+        zmk,kscan = &kscan0;
+        zmk,matrix_transform = &default_transform;
+    };
+
+    // 定义矩阵扫描的引脚
+    //col2row :从col（列）进row（行）出；进的地方是高电平（GPIO_ACTIVE_HIGH），出的地方是拉低（GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN），如果换进出模式，要遵循此规则
+    kscan0: kscan_0 {
+        compatible = "zmk,kscan-gpio-matrix";
+        label = "KSCAN";
+        diode-direction = "row2col";
+
+        // 行
+        // row-gpios
+        //     = <&pro_micro 4 GPIO_ACTIVE_HIGH>
+        //     , <&pro_micro 5 GPIO_ACTIVE_HIGH>
+        //     ;
+        // 列
+        // col-gpios
+        //     = <&pro_micro 24 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&pro_micro 13 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&pro_micro 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     ;
+
+        row-gpios
+            = <&weekin840_m2 43 GPIO_ACTIVE_HIGH>
+            , <&weekin840_m2 42 GPIO_ACTIVE_HIGH>
+            ;
+        col-gpios
+            = <&weekin840_m2 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&weekin840_m2 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            , <&weekin840_m2 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+            ;
+        // row-gpios
+        //     = <&gpio0 10 GPIO_ACTIVE_HIGH>
+        //     , <&gpio1 6  GPIO_ACTIVE_HIGH>
+        //     ;
+        // col-gpios
+        //     = <&gpio0 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     ;
+    };
+
+    // 矩阵定义
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        rows= <2>;
+        columns = <3>;
+        
+        map = <
+            RC(0,0) RC(0,1) RC(0,2)
+            RC(1,0) RC(1,1) RC(1,2)
+        >;
+    };
+    
+
+};
+
+// &weekin840_m2_i2c {
+// 	status = "okay";
+
+// 	oled: ssd1306@3c {
+// 		compatible = "solomon,ssd1306fb";
+// 		reg = <0x3c>;
+// 		label = "DISPLAY";
+// 		width = <128>;
+// 		height = <32>;
+// 		segment-offset = <0>;
+// 		page-offset = <0>;
+// 		display-offset = <0>;
+// 		multiplex-ratio = <31>;
+// 		segment-remap;
+// 		com-invdir;
+// 		com-sequential;
+// 		prechargep = <0x22>;
+// 	};
+// };
