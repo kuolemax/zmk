@@ -7,9 +7,9 @@
 #pragma once
 
 struct zmk_led_hsb {
-    uint16_t h;
-    uint8_t s;
-    uint8_t b;
+    uint16_t h; // Hue 0-360 色相 0/360 红色 120 绿色 240 蓝色
+    uint8_t s; // Saturation 饱和度 0-100 0是灰色
+    uint8_t b; // Brightness 亮度 0-100 0是黑色
 };
 
 int zmk_rgb_underglow_toggle();

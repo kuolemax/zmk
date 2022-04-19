@@ -1,7 +1,18 @@
 {
   "files.associations": {
     "*.overlay": "dts",
-    "*.keymap": "dts"
+    "ext_power.h": "c",
+    "device.h": "c",
+    "init.h": "c",
+    "toolchain.h": "c",
+    "stdbool.h": "c",
+    "kernel_includes.h": "c",
+    "types.h": "c",
+    "kernel.h": "c",
+    "mem_domain.h": "c",
+    "kobject.h": "c",
+    "settings.h": "c"
   },
-  "python.formatting.provider": "black"
+  "python.formatting.provider": "black",
+  "C_Cpp.errorSquiggles": "Disabled"
 }

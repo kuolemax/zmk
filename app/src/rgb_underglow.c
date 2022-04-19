@@ -39,12 +39,13 @@ enum rgb_underglow_effect {
     UNDERGLOW_EFFECT_NUMBER // Used to track number of underglow effects
 };
 
+// rgb 状态
 struct rgb_underglow_state {
-    struct zmk_led_hsb color;
-    uint8_t animation_speed;
-    uint8_t current_effect;
-    uint16_t animation_step;
-    bool on;
+    struct zmk_led_hsb color; // 颜色
+    uint8_t animation_speed;  // 动画速度
+    uint8_t current_effect;   // 当前效果
+    uint16_t animation_step;  // 动画步骤
+    bool on;                  // 开启
 };
 
 static const struct device *led_strip;
@@ -57,12 +58,18 @@ static struct rgb_underglow_state state;
 static const struct device *ext_power;
 #endif
 
+/**
+ * 设置的最小亮度 + 当前亮度 x 设置的亮度区间 / 100
+ */
 static struct zmk_led_hsb hsb_scale_min_max(struct zmk_led_hsb hsb) {
     hsb.b = CONFIG_ZMK_RGB_UNDERGLOW_BRT_MIN +
             (CONFIG_ZMK_RGB_UNDERGLOW_BRT_MAX - CONFIG_ZMK_RGB_UNDERGLOW_BRT_MIN) * hsb.b / BRT_MAX;
     return hsb;
 }
 
+/**
+ * 当前亮度 x 设置亮度最大值 / 100
+ */
 static struct zmk_led_hsb hsb_scale_zero_max(struct zmk_led_hsb hsb) {
     hsb.b = hsb.b * CONFIG_ZMK_RGB_UNDERGLOW_BRT_MAX / BRT_MAX;
     return hsb;
@@ -117,27 +124,46 @@ static struct led_rgb hsb_to_rgb(struct zmk_led_hsb hsb) {
     return rgb;
 }
 
+// 常亮
+/*
+ * STRIP_NUM_PIXELS: 灯珠数量
+ * pixels: 灯带数组
+ * hsb_to_rgb(): 设置灯珠的颜色必须使用rgb
+ * hsb_scale_min_max: 当前颜色b值相对全部亮度的比例 rgb_min + ((rgb_max-rgb_min) * color.b /
+ * brt_max) hsb_scale_zero_max: 当前颜色b值相对最大亮度的比例 rgb_max * color.b /brt_max
+ */
 static void zmk_rgb_underglow_effect_solid() {
+    // 将所有灯珠设为
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         pixels[i] = hsb_to_rgb(hsb_scale_min_max(state.color));
     }
 }
 
+// 呼吸灯
 static void zmk_rgb_underglow_effect_breathe() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         struct zmk_led_hsb hsb = state.color;
+        /*
+         * step: 0 <=> 2400
+         * abs(state.animation_step - 1200) / 12: 100 => 0 => 100
+         * 亮度从0到100慢慢变化
+         */
         hsb.b = abs(state.animation_step - 1200) / 12;
 
+        // TODO hsb_scale_zero_max:
         pixels[i] = hsb_to_rgb(hsb_scale_zero_max(hsb));
     }
 
+    // step 增加 speed * 10
     state.animation_step += state.animation_speed * 10;
 
+    // step 超过 2400 归零
     if (state.animation_step > 2400) {
         state.animation_step = 0;
     }
 }
 
+// 序列，频谱，光谱
 static void zmk_rgb_underglow_effect_spectrum() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         struct zmk_led_hsb hsb = state.color;
@@ -150,6 +176,7 @@ static void zmk_rgb_underglow_effect_spectrum() {
     state.animation_step = state.animation_step % HUE_MAX;
 }
 
+// 漩涡
 static void zmk_rgb_underglow_effect_swirl() {
     for (int i = 0; i < STRIP_NUM_PIXELS; i++) {
         struct zmk_led_hsb hsb = state.color;

@@ -32,24 +32,24 @@
         //     , <&pro_micro 9 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
         //     ;
 
-        row-gpios
-            = <&weekin840_m2 43 GPIO_ACTIVE_HIGH>
-            , <&weekin840_m2 42 GPIO_ACTIVE_HIGH>
-            ;
-        col-gpios
-            = <&weekin840_m2 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&weekin840_m2 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            , <&weekin840_m2 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-            ;
         // row-gpios
-        //     = <&gpio0 10 GPIO_ACTIVE_HIGH>
-        //     , <&gpio1 6  GPIO_ACTIVE_HIGH>
+        //     = <&weekin840_m2 43 GPIO_ACTIVE_HIGH>
+        //     , <&weekin840_m2 42 GPIO_ACTIVE_HIGH>
         //     ;
         // col-gpios
-        //     = <&gpio0 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-        //     , <&gpio0 28 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
-        //     , <&gpio1 11 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     = <&weekin840_m2 3 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&weekin840_m2 4 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
+        //     , <&weekin840_m2 1 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)>
         //     ;
+        row-gpios
+            = <&gpio0 5 GPIO_ACTIVE_HIGH> // 15
+            , <&gpio0 12 GPIO_ACTIVE_HIGH> // 20
+            ;
+        col-gpios
+            = <&gpio0 30 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // 34
+            , <&gpio0 26 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // 12
+            , <&gpio1 0 (GPIO_ACTIVE_HIGH | GPIO_PULL_DOWN)> // 36
+            ;
     };
 
     // 矩阵定义
